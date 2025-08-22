@@ -8,7 +8,7 @@ mkdir -p app/src/main/res/layout
 mkdir -p app/src/main/res/values
 
 # Descargar imagen chibi Ritsu
-wget -O app/src/main/res/drawable/ritsu_splash.png "https://www.clipartmax.com/png/middle/m2H7i8m2i8i8m2G6_chibi-ritsu-k-on-ritsu-chibi.png"
+wget -O app/src/main/res/drawable/ritsu_splash.png "https://www.pngegg.com/en/png-pbqzx"
 
 # build.gradle
 cat > app/build.gradle <<'EOG'
@@ -135,7 +135,7 @@ mkdir -p app/src/main/res/layout
 mkdir -p app/src/main/res/values
 
 # Descargar imagen chibi Ritsu
-wget -O app/src/main/res/drawable/ritsu_splash.png "https://www.clipartmax.com/png/middle/m2H7i8m2i8i8m2G6_chibi-ritsu-k-on-ritsu-chibi.png"
+wget -O app/src/main/res/drawable/ritsu_splash.png "https://www.pngegg.com/en/png-pbqzx"
 
 # build.gradle
 cat > app/build.gradle <<'EOG'

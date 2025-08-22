@@ -46,7 +46,6 @@ allprojects {
 EOG
 
 # -------- Gradle (app) SIN module() --------
-cat > app/build.gradle <<'EOG'
 apply plugin: 'com.android.application'
 
 android {
@@ -256,3 +255,45 @@ else
 fi
 
 echo "🎉 Listo: Ritsu IA con splash chibi animado."
+
+# 🔹 Forzar build.gradle limpio
+rm -f app/build.gradle
+cat > app/build.gradle <<'EOG'
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.example.ritsuia"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.ritsuia"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+}
+EOG
+
+# 🔹 Compilar e instalar
+./gradlew clean assembleDebug -Pandroid.aapt2FromMaven=true
+APK_PATH="$(pwd)/app/build/outputs/apk/debug/app-debug.apk"
+echo "✅ APK generado en: $APK_PATH"
+if command -v am >/dev/null 2>&1; then
+    am start -a android.intent.action.VIEW \
+       -d "file://$APK_PATH" \
+       -t "application/vnd.android.package-archive" || true
+fi

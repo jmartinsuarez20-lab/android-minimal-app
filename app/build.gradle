@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.application'
+    id 'com.chaquo.python'
+}
+
+android {
+    namespace 'com.example.youtubesplitter'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.youtubesplitter"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        chaquopy {
+            python {
+                pip {
+                    install "yt-dlp"
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // Habilitar View Binding
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    // Android UI
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Background processing
+    implementation 'androidx.work:work-runtime:2.8.1'
+
+    // FFmpeg for video splitting
+    implementation 'com.arthenica:ffmpeg-kit-full:6.0-2'
+
+    // Google API for YouTube Upload
+    implementation('com.google.api-client:google-api-client-android:2.8.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation('com.google.apis:google-api-services-youtube:v3-rev222-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+
+    // Test dependencies
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

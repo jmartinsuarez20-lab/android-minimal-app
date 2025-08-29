@@ -53,8 +53,11 @@ dependencies {
     // FFmpeg for video splitting
     implementation 'com.arthenica:ffmpeg-kit-full:6.0-2'
 
+    // Google Sign-In for authentication
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+
     // Google API for YouTube Upload
-    implementation('com.google.api-client:google-api-client-android:2.8.0') {
+    implementation('com.google.api-client:google-api-client:1.33.0') {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation('com.google.apis:google-api-services-youtube:v3-rev222-1.25.0') {

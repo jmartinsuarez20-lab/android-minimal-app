@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Clipper</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 14px;
+            color: #666;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Video Clipper</h1>
+        <p>Pega la URL de un vídeo de YouTube para dividirlo en clips.</p>
+        <form id="videoForm">
+            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=..." required>
+            <br>
+            <button type="submit" id="submitBtn">Procesar Vídeo</button>
+        </form>
+        <div id="status">Introduce una URL y haz clic en "Procesar Vídeo".</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('videoForm');
+        const urlInput = document.getElementById('youtubeUrl');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusDiv = document.getElementById('status');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const url = urlInput.value;
+            if (!url) {
+                statusDiv.textContent = 'Por favor, introduce una URL.';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            statusDiv.textContent = 'Procesando... Esto puede tardar varios minutos dependiendo de la duración del vídeo.';
+
+            try {
+                // Nota: El backend se ejecuta en el puerto 5001
+                const response = await fetch('http://localhost:5001/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    statusDiv.innerHTML = `<strong>¡Éxito! Vídeo procesado.</strong><br><br>Clips generados:<br><pre>${JSON.stringify(result.clips, null, 2)}</pre>`;
+                } else {
+                    statusDiv.textContent = `Error: ${result.error || 'Ocurrió un error desconocido.'}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.textContent = 'Error de conexión con el servidor. Asegúrate de que el backend se está ejecutando.';
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
